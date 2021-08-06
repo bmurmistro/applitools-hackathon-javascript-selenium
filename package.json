@@ -3,7 +3,12 @@
   "version": "1.1.0",
   "description": "",
   "scripts": {
-    "test": "mocha --no-timeouts \"test/*.test.js\""
+    "TraditionalSuiteV1": "mocha --no-timeouts --baseUrl=https://demo.applitools.com/hackathon.html ./test/TraditionalSuite.js",
+    "TraditionalSuiteV2": "mocha --no-timeouts  --baseUrl=https://demo.applitools.com/hackathonV2.html ./test/TraditionalSuite.js",
+    "VisualAITestSolutionV1": "mocha --no-timeouts  --baseUrl=https://demo.applitools.com/hackathon.html ./test/VisualAITestSolution.js",
+    "VisualAITestSolutionV2": "mocha --no-timeouts  --baseUrl=https://demo.applitools.com/hackathonV2.html ./test/VisualAITestSolution.js",
+    "VisualAITestV1": "mocha --no-timeouts --baseUrl=https://demo.applitools.com/hackathon.html ./test/VisualAITest.js",
+    "VisualAITestV2": "mocha --no-timeouts  --baseUrl=https://demo.applitools.com/hackathonV2.html ./test/VisualAITest.js"
   },
   "author": {
     "name": "Applitools Team",
@@ -11,7 +16,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@applitools/eyes-selenium": "^4.55.4",
+    "@applitools/eyes-selenium": "4.55.4",
     "chromedriver": "^92.0.1",
     "mocha": "^9.0.3",
     "selenium-webdriver": "^4.0.0-beta.4"

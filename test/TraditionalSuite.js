@@ -3,7 +3,9 @@
 const { Builder, By } = require('selenium-webdriver');
 const { Eyes, VisualGridRunner, RunnerOptions, Target, RectangleSize, Configuration, BatchInfo, BrowserType, DeviceName, ScreenOrientation} = require('@applitools/eyes-selenium');
 const chrome = require('selenium-webdriver/chrome')
-
+const argv = require('minimist')(process.argv.slice(2));
+console.log('baseUrl', argv.baseUrl);
+const baseUrl = argv.baseUrl;
 describe('DemoApp - Ultrafast Grid', function () {
   let runner, eyes, driver;
 
