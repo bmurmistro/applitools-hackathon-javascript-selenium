@@ -14,7 +14,6 @@ describe('Traditional Tests', function() {
         driver = await new Builder()
         .forBrowser('chrome')
         .build();
-        console.log("Using url: " + baseUrl);
         await driver.get(baseUrl);
     })
     it('Validate Labels', async () => {
