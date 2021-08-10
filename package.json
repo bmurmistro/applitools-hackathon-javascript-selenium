@@ -1,14 +1,14 @@
 {
-  "name": "tutorial-selenium-javascript-visualgrid",
-  "version": "1.1.0",
+  "name": "applitools-selenium-javascript-hackathon",
+  "version": "1.0.0",
   "description": "",
   "scripts": {
-    "TraditionalSuiteV1": "mocha --no-timeouts --baseUrl=https://demo.applitools.com/hackathon.html ./test/TraditionalSuite.js",
-    "TraditionalSuiteV2": "mocha --no-timeouts  --baseUrl=https://demo.applitools.com/hackathonV2.html ./test/TraditionalSuite.js",
-    "VisualAITestSolutionV1": "mocha --no-timeouts  --baseUrl=https://demo.applitools.com/hackathon.html ./test/VisualAITestSolution.js",
-    "VisualAITestSolutionV2": "mocha --no-timeouts  --baseUrl=https://demo.applitools.com/hackathonV2.html ./test/VisualAITestSolution.js",
-    "VisualAITestV1": "mocha --no-timeouts --baseUrl=https://demo.applitools.com/hackathon.html ./test/VisualAITest.js",
-    "VisualAITestV2": "mocha --no-timeouts  --baseUrl=https://demo.applitools.com/hackathonV2.html ./test/VisualAITest.js"
+    "TraditionalSuiteV1": "cross-env BASE_URL=https://demo.applitools.com/hackathon.html mocha --no-timeouts ./test/TraditionalSuite.js",
+    "TraditionalSuiteV2": "cross-env BASE_URL=https://demo.applitools.com/hackathonV2.html mocha --no-timeouts ./test/TraditionalSuite.js",
+    "VisualAITestSolutionV1": "cross-env BASE_URL=https://demo.applitools.com/hackathon.html mocha --no-timeouts ./test/VisualAITestSolution.js",
+    "VisualAITestSolutionV2": "cross-env-shell BASE_URL=https://demo.applitools.com/hackathonV2.html mocha --no-timeouts ./test/VisualAITestSolution.js",
+    "VisualAITestV1": "cross-env BASE_URL=https://demo.applitools.com/hackathon.html mocha --no-timeouts ./test/VisualAITest.js",
+    "VisualAITestV2": "cross-env BASE_URL=https://demo.applitools.com/hackathonV2.html mocha --no-timeouts ./test/VisualAITest.js"
   },
   "author": {
     "name": "Applitools Team",
@@ -17,7 +17,9 @@
   "license": "ISC",
   "dependencies": {
     "@applitools/eyes-selenium": "4.55.4",
+    "chai": "4.3.4",
     "chromedriver": "^92.0.1",
+    "cross-env": "^7.0.3",
     "mocha": "^9.0.3",
     "selenium-webdriver": "^4.0.0-beta.4"
   }

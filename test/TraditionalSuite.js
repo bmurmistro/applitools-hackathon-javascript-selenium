@@ -1,93 +1,137 @@
 'use strict';
+require('chromedriver');
+const { assert } = require('chai');
+const { beforeEach, before, describe, it, after, afterEach } = require('mocha');
+const {Builder,By} = require("selenium-webdriver");
+const errorLocator = By.css(".alert.alert-warning");
+const baseUrl = process.env.BASE_URL;
+console.log("Using url: " + baseUrl);
 
-const { Builder, By } = require('selenium-webdriver');
-const { Eyes, VisualGridRunner, RunnerOptions, Target, RectangleSize, Configuration, BatchInfo, BrowserType, DeviceName, ScreenOrientation} = require('@applitools/eyes-selenium');
-const chrome = require('selenium-webdriver/chrome')
-const argv = require('minimist')(process.argv.slice(2));
-console.log('baseUrl', argv.baseUrl);
-const baseUrl = argv.baseUrl;
-describe('DemoApp - Ultrafast Grid', function () {
-  let runner, eyes, driver;
+describe('Traditional Tests', function() {
+    let driver;
 
-  before(async () => {
-
-    // Create a new chrome web driver
-    const options = new chrome.Options();
-    if (process.env.CI === 'true') options.headless();
-
-    driver = await new Builder()
+    beforeEach(async () => {
+        driver = await new Builder()
         .forBrowser('chrome')
-        .setChromeOptions(options)
         .build();
-
-    // Create a runner with concurrency of 1
-    const runnerOptions = new RunnerOptions().testConcurrency(5);
-    runner = new VisualGridRunner(runnerOptions);
-
-    // Create Eyes object with the runner, meaning it'll be a Visual Grid eyes.
-    eyes = new Eyes(runner);
-
-    // Initialize the eyes configuration.
-    let conf = new Configuration()
-
-    // You can get your api key from the Applitools dashboard
-    conf.setApiKey(process.env.APPLITOOLS_API_KEY)
-
-    // create a new batch info instance and set it to the configuration
-    conf.setBatch(new BatchInfo("Ultrafast Batch"));
-
-    // Add browsers with different viewports
-    conf.addBrowser(800, 600, BrowserType.CHROME);
-    conf.addBrowser(700, 500, BrowserType.FIREFOX);
-    conf.addBrowser(1600, 1200, BrowserType.IE_11);
-    conf.addBrowser(1024, 768, BrowserType.EDGE_CHROMIUM);
-    conf.addBrowser(800, 600, BrowserType.SAFARI);
-
-    // Add mobile emulation devices in Portrait mode
-    conf.addDeviceEmulation(DeviceName.iPhone_X, ScreenOrientation.PORTRAIT);
-    conf.addDeviceEmulation(DeviceName.Pixel_2, ScreenOrientation.PORTRAIT);
-
-    // set the configuration to eyes
-    eyes.setConfiguration(conf)
+        console.log("Using url: " + baseUrl);
+        await driver.get(baseUrl);
+    })
+    it('Validate Labels', async () => {
+        // Assert Text of Login Form
+        await driver.findElement(By.css('.auth-header')).getText().then(textValue => {
+            assert.equal('Login Form', textValue)
+        });
+        assert.ok(await driver.findElement(By.css('.auth-header')).isDisplayed());
 
 
-  });
+        // Assert Text of Username Label
+        await driver.findElement(By.css('form > div:nth-child(1) > label')).getText().then(textValue => {
+            assert.equal('Username', textValue)
+        });
+        assert.ok(await driver.findElement(By.css('form > div:nth-child(1) > label')).isDisplayed());
 
-  it('ultraFastTest', async () => {
-    // Call Open on eyes to initialize a test session
-    await eyes.open(driver, 'Demo App - JS Selenium 4', 'Ultrafast grid demo', new RectangleSize(800, 600));
+        // ****Assert Text of Username Element
+        await driver.findElement(By.css('#username')).getAttribute("placeholder").then(textValue => {
+            assert.equal('Enter your username', textValue)
+        });
+        assert.ok(await driver.findElement(By.css('#username')).isDisplayed());
 
-    // Navigate the browser to the "ACME" demo app.
-    // ⭐️ Note to see visual bugs, run the test using the above URL for the 1st run.
-    // but then change the above URL to https://demo.applitools.com/index_v2.html
-    // (for the 2nd run)
-    await driver.get("https://demo.applitools.com");
+        // Assert Text of Password Label
+        await driver.findElement(By.css('form > div:nth-child(2) > label')).getText().then(textValue => {
+            assert.equal('Password', textValue)
+        });
+        assert.ok(await driver.findElement(By.css('form > div:nth-child(2) > label')).isDisplayed());
 
-    // check the login page with fluent api, see more info here
-    // https://applitools.com/docs/topics/sdk/the-eyes-sdk-check-fluent-api.html
-    await eyes.check("Login Window", Target.window().fully());
+        // Assert Text of Password Element
+        await driver.findElement(By.css('#password')).getAttribute("placeholder").then(textValue => {
+            assert.equal('Enter your password', textValue)
+        });
+        assert.ok(await driver.findElement(By.css('#password')).isDisplayed());
 
-    // This will create a test with two test steps.
-    await driver.findElement(By.id("log-in")).click();
+        // Assert text of Login Element
+        await driver.findElement(By.css('#log-in')).getText().then(textValue => {
+            assert.equal('Log In', textValue)
+        });
+        assert.ok(await driver.findElement(By.css('#log-in')).isDisplayed());
 
-    // Check the app page
-    await eyes.check("App Window", Target.window().fully());
+        // Asssert Text of Remember Me Element
+        await driver.findElement(By.css('.form-check-label')).getText().then(textValue => {
+            assert.equal('Remember Me', textValue)
+        });
+        assert.ok(await driver.findElement(By.css('.form-check-label')).isDisplayed());
+    })
 
-    // Call Close on eyes to let the server know it should display the results
-    await eyes.closeAsync();
-  });
+    it('Validate Images', async () =>{
+        // Assert Logo Icon is Visible
+        assert.ok(await driver.findElement(By.css('.logo-w>a>img')).isDisplayed());
 
-  after(async () => {
-    // Close the browser.
-    await driver.quit();
+        // Assert User Icon is Visible
+        assert.ok(await driver.findElement(By.css('.pre-icon.os-icon.os-icon-user-male-circle')).isDisplayed());
 
-    // If the test was aborted before eyes.close was called, ends the test as aborted.
-    await eyes.abortAsync();
+        // Assert Fingerprint Icon is Visible
+        assert.ok(await driver.findElement(By.css('.pre-icon.os-icon.os-icon-fingerprint')).isDisplayed());
 
-    // we pass false to this method to suppress the exception that is thrown if we
-    // find visual differences
-    const allTestResults = await runner.getAllTestResults();
-    console.log(allTestResults);
-  });
-});
+        // Assert Twitter Icon is Visible
+        assert.ok(await driver.findElement(By.css('a:nth-child(1) > img')).isDisplayed());
 
+        // Assert Facebook Icon is Visible
+        assert.ok(await driver.findElement(By.css('a:nth-child(2) > img')).isDisplayed());
+
+        // Assert LinkedIn Icon is Visible
+        assert.ok(await driver.findElement(By.css('a:nth-child(3) > img')).isDisplayed());
+    })
+
+    it('Vallidate Checkbox', async () => {
+        assert.notOk(await driver.findElement(By.css('.form-check-input')).isSelected());
+    })
+
+    // Both username and pssword must be present
+    it('Both Username and Password must be present', async () => {
+        // click log in
+        await driver.findElement(By.css("#log-in")).click();
+        assert.ok(await driver.findElement(errorLocator).isDisplayed());
+        await driver.findElement(errorLocator).getText().then(textValue => {
+            assert.equal('Both Username and Password must be present', textValue)
+        });
+
+    })
+
+    // Password must be present
+    it('Password must be present', async () => {
+        await driver.findElement(By.css('#username')).sendKeys("John Smith");
+        // submit form
+        await driver.findElement(By.css("#log-in")).click();
+        assert.ok(await driver.findElement(errorLocator).isDisplayed());
+        await driver.findElement(errorLocator).getText().then(textValue => {
+            assert.equal('Password must be present', textValue)
+        });
+    })
+
+    // Username must be present
+    it('Username must be present', async () => {
+        await driver.findElement(By.css('#password')).sendKeys("JABC$1@");
+        // submit form
+        await driver.findElement(By.css("#log-in")).click();
+        assert.ok(await driver.findElement(errorLocator).isDisplayed());
+        await driver.findElement(errorLocator).getText().then(textValue => {
+            assert.equal('Username must be present', textValue)
+        });
+    })
+
+    // Successful Login
+    it('Should log you in', async () =>{
+        await driver.findElement(By.css('#username')).sendKeys("John Smith");
+        await driver.findElement(By.css('#password')).sendKeys("JABC$1@");
+        // submit form
+        await driver.findElement(By.css("#log-in")).click();
+        await driver.getTitle().then(textValue => {
+            assert.strictEqual('ACME demo app', textValue)
+        });
+    })
+
+    afterEach(async () => {
+        await driver.quit();
+    })
+
+})
