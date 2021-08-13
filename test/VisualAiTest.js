@@ -6,8 +6,8 @@ const { Eyes, Target, Configuration, DeviceName, BatchInfo, BrowserType, Classic
 const baseUrl = process.env.BASE_URL;
 
 // set these values
-const batchName = "[Team Name] Testcafe Batch";
-const appName = "[Team Name] Testcafe App";
+const batchName = "[Team Name] Javascript Selenium Batch";
+const appName = "[Team Name] Javascript Selenium App";
 const apiKey = process.env.APPLITOOLS_API_KEY || 'your APPLITOOLS_API_KEY';
 const batchInfo =  new BatchInfo(batchName);
 
@@ -41,7 +41,6 @@ describe('Visual Tests', async function() {
         // conf.setServerUrl("SET_YOUR_DEDICATED_CLOUD_URL")
 
         // set the configuration to eyes
-        eyes.setConfiguration(conf);
         //eyes.setLogHandler(new StdoutLogHandler(true));
 
         // Add browsers with different viewports
@@ -54,7 +53,7 @@ describe('Visual Tests', async function() {
         // Add mobile emulation devices in Portrait mode
         conf.addDeviceEmulation(DeviceName.iPhone_X, ScreenOrientation.PORTRAIT);
         conf.addDeviceEmulation(DeviceName.Pixel_2, ScreenOrientation.PORTRAIT);
-
+        eyes.setConfiguration(conf);
         // Initialize a test session
         await eyes.open(driver, appName, this.currentTest.title, new RectangleSize(800,600));
         // browser, OS, AppName, TestName, ViewportSize
