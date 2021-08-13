@@ -2,13 +2,14 @@
 require('chromedriver');
 const { beforeEach, before, describe, it, after, afterEach } = require('mocha');
 const { Builder, By}  = require("selenium-webdriver");
-const { Eyes, Target, Configuration, BatchInfo, ClassicRunner, RectangleSize, VisualGridRunner  } = require('@applitools/eyes-selenium');
+const { Eyes, Target, Configuration, DeviceName, BatchInfo, BrowserType, ClassicRunner, RectangleSize, ScreenOrientation, VisualGridRunner  } = require('@applitools/eyes-selenium');
 const baseUrl = process.env.BASE_URL;
 
 // set these values
 const batchName = "[Team Name] Testcafe Batch";
 const appName = "[Team Name] Testcafe App";
 const apiKey = process.env.APPLITOOLS_API_KEY || 'your APPLITOOLS_API_KEY';
+const batchInfo =  new BatchInfo(batchName);
 
 console.log("Using url: " + baseUrl);
 
@@ -42,6 +43,17 @@ describe('Visual Tests', async function() {
         // set the configuration to eyes
         eyes.setConfiguration(conf);
         //eyes.setLogHandler(new StdoutLogHandler(true));
+
+        // Add browsers with different viewports
+        conf.addBrowser(800, 600, BrowserType.CHROME);
+        conf.addBrowser(700, 500, BrowserType.FIREFOX);
+        conf.addBrowser(1600, 1200, BrowserType.IE_11);
+        conf.addBrowser(1024, 768, BrowserType.EDGE_CHROMIUM);
+        conf.addBrowser(800, 600, BrowserType.SAFARI);
+
+        // Add mobile emulation devices in Portrait mode
+        conf.addDeviceEmulation(DeviceName.iPhone_X, ScreenOrientation.PORTRAIT);
+        conf.addDeviceEmulation(DeviceName.Pixel_2, ScreenOrientation.PORTRAIT);
 
         // Initialize a test session
         await eyes.open(driver, appName, this.currentTest.title, new RectangleSize(800,600));
